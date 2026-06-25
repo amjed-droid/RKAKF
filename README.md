@@ -1,5 +1,7 @@
 # Recursive Kurtosis-Aware Kalman Filter (RKAKF): Reference Benchmarking Suite
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.xxxxxx.svg)](https://doi.org/10.5281/zenodo.xxxxxx)
+
 This repository hosts the official MATLAB simulation suite and reference implementations for the **Recursive Kurtosis-Aware Kalman Filter (RKAKF)**. This software suite is designed to ensure rigorous academic reproducibility and benchmarking of the proposed filter's resilience against stealthy non-Gaussian anomalies and Compound Laplace-Gaussian (CLG) mixture attacks.
 
 To accommodate different reviewer preferences and computational workflows, the codebase is provided in two equivalent architectural layouts:
@@ -53,7 +55,7 @@ The repository is organized as follows:
 ## 2. Prerequisites & Toolbox Requirements
 
 To run this simulation suite, the following environment and toolboxes are required:
-* **MATLAB R2025b or later**: Necessary for modern visualization and analysis functions (such as `xregion`, `movvar`, and `histogram`).
+* **MATLAB R2020b or later**: Necessary for modern visualization and analysis functions (such as `xregion`, `movvar`, and `histogram`).
 * **Statistics and Machine Learning Toolbox**: Required for statistical tests, sampling, and distribution plotting functions (specifically `signrank`, `randsample`, and `histogram`).
 * **Parallel Computing Toolbox**: Required for accelerated execution of Monte Carlo simulation loops via `parfor` in EXP 5 and EXP 7.
   * *Note: If the Parallel Computing Toolbox is not installed, you can simply replace `parfor` with a standard `for` loop in the scripts, and the code will execute successfully (though execution time will increase).*
@@ -97,3 +99,21 @@ run_all_experiments
 Alternatively, you can run any individual experiment file directly (e.g., `exp05_monte_carlo` or `exp06_drone_trajectory`). The `load_parameters.m` file called at the start of each script will automatically configure relative path dependencies and add the `src/` filters and utils to your MATLAB session.
 
 All output figures will be written to `RKAKF_Figures/`.
+
+---
+
+## 5. License & Citation
+
+### Citation
+If you use this codebase in your research, please cite it using the metadata in the `CITATION.cff` file:
+```bibtex
+@software{RKAKF_MATLAB_Suite,
+  author = {Ahmed Sattar Jabbar and Haifa Taha Abd Ahmed},
+  title = {RKAKF: Recursive Kurtosis-Aware Kalman Filter - MATLAB Simulation Suite},
+  year = {2026},
+  url = {https://github.com/amjed-droid/RKAKF}
+}
+```
+
+### License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

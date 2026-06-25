@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: "RKAKF: Recursive Kurtosis-Aware Kalman Filter - MATLAB Simulation Suite"
+message: "If you use this code in your research, please cite it as below."
+authors:
+  - family-names: "Jabbar"
+    given-names: "Ahmed Sattar"
+  - family-names: "Abd Ahmed"
+    given-names: "Haifa Taha"
+date-released: 2026-06-25
+url: "https://github.com/amjed-droid/RKAKF"
+repository-code: "https://github.com/amjed-droid/RKAKF"
