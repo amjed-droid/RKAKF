@@ -16,7 +16,6 @@ The repository is organized as follows:
 ├── RKAKF_Unified_Publication.m   # Unified monolithic script (Run all experiments in one file)
 ├── load_parameters.m             # Centralized configuration and automated path registration
 ├── run_all_experiments.m         # Master runner script for the modular codebase
-├── generate_latex_tables.m       # LaTeX publication tables generator
 ├── README.md                     # Documentation
 ├── src/                          # Core source code
 │   ├── filters/                  # State estimators and filters
@@ -97,4 +96,4 @@ run_all_experiments
 
 Alternatively, you can run any individual experiment file directly (e.g., `exp05_monte_carlo` or `exp06_drone_trajectory`). The `load_parameters.m` file called at the start of each script will automatically configure relative path dependencies and add the `src/` filters and utils to your MATLAB session.
 
-All output figures will be written to `RKAKF_Figures/`, and LaTeX source tables will be printed to the terminal console.
+All output figures will be written to `RKAKF_Figures/`.

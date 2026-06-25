@@ -23,9 +23,6 @@ exp09_gain_restoration;
 exp10_dashboard;
 exp_m1_2d_system;
 
-% Generate Tables
-generate_latex_tables;
-
 fprintf('=====================================================\n');
 fprintf('  All experiments complete.\n');
 fprintf('  Figures saved to: RKAKF_Figures/\n');
