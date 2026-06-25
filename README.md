@@ -1,8 +1,7 @@
 # Recursive Kurtosis-Aware Kalman Filter (RKAKF): Reference Benchmarking Suite
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.xxxxxx.svg)](https://doi.org/10.5281/zenodo.xxxxxx)
-
 This repository hosts the official MATLAB simulation suite and reference implementations for the **Recursive Kurtosis-Aware Kalman Filter (RKAKF)**. This software suite is designed to ensure rigorous academic reproducibility and benchmarking of the proposed filter's resilience against stealthy non-Gaussian anomalies and Compound Laplace-Gaussian (CLG) mixture attacks.
+
 
 To accommodate different reviewer preferences and computational workflows, the codebase is provided in two equivalent architectural layouts:
 1. **Monolithic Architecture**: A single, self-contained MATLAB script (`RKAKF_Unified_Publication.m`) containing all experiments and helper functions. This ensures zero-dependency execution and easy reproduction of all figures and tables.
