@@ -1,5 +1,5 @@
 %% =========================================================
-%  RKAKF_Unified_Publication.m
+%  RKAKF_Reproduction.m
 %  Recursive Kurtosis-Aware Kalman Filter
 %  Unified Experiment Suite — Publication Version
 %  All hyperparameters defined ONCE; never redefined mid-script.

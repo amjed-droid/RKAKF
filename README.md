@@ -4,7 +4,7 @@ This repository hosts the official MATLAB simulation suite and reference impleme
 
 
 To accommodate different reviewer preferences and computational workflows, the codebase is provided in two equivalent architectural layouts:
-1. **Monolithic Architecture**: A single, self-contained MATLAB script (`RKAKF_Unified_Publication.m`) containing all experiments and helper functions. This ensures zero-dependency execution and easy reproduction of all figures and tables.
+1. **Monolithic Architecture**: A single, self-contained MATLAB script (`RKAKF_Reproduction.m`) containing all experiments and helper functions. This ensures zero-dependency execution and easy reproduction of all figures and tables.
 2. **Modular Architecture**: A clean, structured directory layout with dedicated folders for core source code and individual experiments.
 
 ---
@@ -14,7 +14,7 @@ To accommodate different reviewer preferences and computational workflows, the c
 The repository is organized as follows:
 
 ```
-├── RKAKF_Unified_Publication.m   # Unified monolithic script (Run all experiments in one file)
+├── RKAKF_Reproduction.m          # Unified monolithic script (Run all experiments in one file)
 ├── load_parameters.m             # Centralized configuration and automated path registration
 ├── run_all_experiments.m         # Master runner script for the modular codebase
 ├── README.md                     # Documentation
@@ -85,7 +85,7 @@ The suite executes the following numerical experiments detailed in the manuscrip
 In the MATLAB Command Window, execute:
 ```matlab
 % Run the unified monolithic script
-RKAKF_Unified_Publication
+RKAKF_Reproduction
 ```
 
 ### Running the Modular Suite
