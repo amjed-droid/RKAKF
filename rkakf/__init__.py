@@ -12,8 +12,7 @@ Department of Statistics, Mustansiriyah University, Baghdad, Iraq.
 
 Reference:
     "A Cubic-Decay Recursive Kurtosis-Aware Kalman Filter (RKAKF):
-     Resolving the Kurtosis Ratio Paradox to Bypass Structural Blindness",
-    Submitted to Signal Processing (Elsevier), 2026.
+     Resolving the Kurtosis Ratio Paradox to Bypass Structural Blindness", 2026.
 """
 
 __version__ = "1.0.0"

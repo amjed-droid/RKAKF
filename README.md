@@ -2,15 +2,13 @@
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Paper: Signal Processing](https://img.shields.io/badge/Journal-Elsevier%20Signal%20Processing-orange.svg)](https://www.sciencedirect.com/journal/signal-processing)
 [![Tests: Passing](https://img.shields.io/badge/Tests-4%2F4%20Passing-brightgreen.svg)](tests/)
 
 Official Python implementation and reproduction suite for the paper:
 
 > **A Cubic-Decay Recursive Kurtosis-Aware Kalman Filter for State Estimation under Structurally Masked Impulsive Disturbances**  
 > *Ahmed Sattar Jabbar\* and Haifa Taha Abd Ahmed*  
-> Department of Statistics, College of Administration and Economics, Mustansiriyah University, Baghdad, Iraq.  
-
+> Department of Statistics, College of Administration and Economics, Mustansiriyah University, Baghdad, Iraq.
 
 ---
 
@@ -203,10 +201,8 @@ If you use RKAKF in your research or applications, please cite our paper:
 @article{jabbar2026rkakf,
   title     = {A Cubic-Decay Recursive Kurtosis-Aware Kalman Filter for State Estimation under Structurally Masked Impulsive Disturbances},
   author    = {Jabbar, Ahmed Sattar and Abd Ahmed, Haifa Taha},
-  journal   = {Signal Processing},
   year      = {2026},
-  publisher = {Elsevier},
-  note      = {Under Review}
+  note      = {Preprint}
 }
 ```
 

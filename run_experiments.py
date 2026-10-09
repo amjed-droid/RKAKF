@@ -5,7 +5,6 @@ RKAKF Experiment Reproduction & Evaluation Suite
 Paper: "A Cubic-Decay Recursive Kurtosis-Aware Kalman Filter (RKAKF):
         Resolving the Kurtosis Ratio Paradox to Bypass Structural Blindness"
 Authors: Ahmed Sattar Jabbar & Haifa Taha Abd Ahmed (Mustansiriyah University)
-Target Journal: Signal Processing (Elsevier)
 
 Usage:
     python run_experiments.py --all           # Run full reproduction suite

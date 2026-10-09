@@ -4,7 +4,6 @@ RKAKF Independent Python Reproduction & Verification Suite
 Paper: "A Cubic-Decay Recursive Kurtosis-Aware Kalman Filter (RKAKF):
         Resolving the Kurtosis Ratio Paradox to Bypass Structural Blindness"
 Authors: Ahmed Sattar Jabbar & Haifa Taha Abd Ahmed (Mustansiriyah University)
-Target Journal: Signal Processing (Elsevier)
 
 This suite independently implements and runs:
 - EXP 1: Structural Blindness Verification (M in [10, 1000], moments & moving variance)
