@@ -14,7 +14,7 @@ Official Python implementation and reproduction suite for the paper:
 
 ---
 
-## 🌟 Theoretical Foundations
+##  Theoretical Foundations
 
 ### 1. The Kurtosis Ratio Paradox
 Recursive higher-order moment estimation in Kalman filtering has historically been hindered by an intrinsic transient instability. When estimating the fourth central moment $\mu_{4,k}$ and variance $\mu_{2,k}$ via symmetric Exponentially Weighted Moving Average (EWMA) updates with forgetting factor $\lambda \in (0, 1)$:
@@ -60,7 +60,7 @@ Because total innovation variance remains strictly bounded below energy threshol
 
 ---
 
-## 🚀 Key Features of RKAKF
+##  Key Features of RKAKF
 
 1. **Fourth-Order Anomaly Detection:** Bypasses structural blindness with zero historical observation buffer overhead.
 2. **Cubic Decay Principle:** Guarantees post-shock stability and unbiased asymptotic moments $\mathbb{E}[\mu_4^*] = \mathbb{E}[\nu^4]$.
@@ -70,7 +70,7 @@ Because total innovation variance remains strictly bounded below energy threshol
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```text
 RKAKF/
@@ -92,7 +92,7 @@ RKAKF/
 
 ---
 
-## ⚡ Installation & Quick Start
+##  Installation & Quick Start
 
 ### Installation
 
@@ -129,7 +129,7 @@ for k, y_k in enumerate(measurements):
 
 ---
 
-## 🔬 Reproducing Paper Experiments
+##  Reproducing Paper Experiments
 
 Run the complete suite or specific experiments via the CLI runner:
 
@@ -163,7 +163,7 @@ All generated figures are saved at 300 DPI in the `figures/` directory.
 
 ---
 
-## 📊 Summary of Experimental Benchmarks
+##  Summary of Experimental Benchmarks
 
 | Scenario | Evaluated Metric | Standard KF | Huber-Robust KF | Particle Filter | **RKAKF (Proposed)** |
 |:---|:---|:---:|:---:|:---:|:---:|
@@ -179,7 +179,7 @@ All generated figures are saved at 300 DPI in the `figures/` directory.
 
 ---
 
-## 🧪 Unit Tests
+##  Unit Tests
 
 Run the mathematical invariant unit test suite:
 
@@ -195,7 +195,7 @@ Tests verify:
 
 ---
 
-## 📖 Citation
+##  Citation
 
 If you use RKAKF in your research or applications, please cite our paper:
 
@@ -212,6 +212,6 @@ If you use RKAKF in your research or applications, please cite our paper:
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
