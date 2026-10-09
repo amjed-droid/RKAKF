@@ -10,7 +10,7 @@ Official Python implementation and reproduction suite for the paper:
 > **A Cubic-Decay Recursive Kurtosis-Aware Kalman Filter for State Estimation under Structurally Masked Impulsive Disturbances**  
 > *Ahmed Sattar Jabbar\* and Haifa Taha Abd Ahmed*  
 > Department of Statistics, College of Administration and Economics, Mustansiriyah University, Baghdad, Iraq.  
-> Target Journal: **Signal Processing (Elsevier)**, 2026.
+
 
 ---
 
