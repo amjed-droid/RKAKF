@@ -1,11 +1,21 @@
 cff-version: 1.2.0
-title: "RKAKF: Recursive Kurtosis-Aware Kalman Filter - MATLAB Simulation Suite"
-message: "If you use this code in your research, please cite it as below."
+title: "A Cubic-Decay Recursive Kurtosis-Aware Kalman Filter for State Estimation under Structurally Masked Impulsive Disturbances"
+message: "If you use this software or paper reproduction suite, please cite it as below."
 authors:
   - family-names: "Jabbar"
     given-names: "Ahmed Sattar"
   - family-names: "Abd Ahmed"
     given-names: "Haifa Taha"
-date-released: 2026-06-25
+date-released: 2026-10-08
 url: "https://github.com/amjed-droid/RKAKF"
 repository-code: "https://github.com/amjed-droid/RKAKF"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Jabbar"
+      given-names: "Ahmed Sattar"
+    - family-names: "Abd Ahmed"
+      given-names: "Haifa Taha"
+  title: "A Cubic-Decay Recursive Kurtosis-Aware Kalman Filter for State Estimation under Structurally Masked Impulsive Disturbances"
+  journal: "Signal Processing"
+  year: 2026

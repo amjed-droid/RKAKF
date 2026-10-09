@@ -1,0 +1,84 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Unit test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Paper manuscript and LaTeX files (local only, excluded from software repo)
+*.tex
+*.pdf
+*.cls
+*.sty
+*.bst
+*.bib
+*.abs
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+Cover Letter*
+highlights*
+cas-*
+els-cas-*
+
+# Root-level loose experiment figures (kept organized inside figures/)
+EXP*.png
+
+# OS and Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.bak
+*.zip
+els-cas-templates/
+python_results/
+page_*.png
+check*.png
+fix_gap_*.png
+inspect_page_*.png
+perfect_*.png
+resolved_*.png
+top1_*.png
+test_*.png
+new_side_*.png
+
+
