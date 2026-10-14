@@ -77,11 +77,14 @@ RKAKF/
 │   ├── filters.py                  # RKAKF, Standard KF, Huber KF, VB Student-t, PF
 │   ├── distributions.py            # CLG mixture, truncated Cauchy, Laplace samplers
 │   └── metrics.py                  # RMSE, MAE, Peak Error, TTR, Wilcoxon test
+├── scripts/                        # Extended Benchmarks & Reproduction Scripts
+│   ├── multivariate_6d_drone_benchmark.py # 6D drone kinematics & nonlinear EKF tracking
+│   └── reproduce_exact_figures.py  # Generates 300 DPI exact paper publication figures
 ├── tests/                          # Formal Mathematical Verification Tests
 │   └── test_rkakf.py               # Unit tests validating Prop 1, Prop 2, Cor 1, Thm 1
 ├── figures/                        # Output directory for generated publication plots
-├── run_experiments.py              # CLI benchmark and reproduction runner
-├── reproduce_all_experiments.py    # Complete monolithic reproduction suite
+├── run_experiments.py              # Modular CLI experiment runner
+├── reproduce_all_experiments.py    # Complete monolithic reproduction suite (EXP 1-10)
 ├── requirements.txt                # Python package dependencies
 ├── pyproject.toml                  # Standard Python packaging (PEP 517/621)
 ├── LICENSE                         # MIT License
@@ -129,9 +132,9 @@ for k, y_k in enumerate(measurements):
 
 ##  Reproducing Paper Experiments
 
-Run the complete suite or specific experiments via the CLI runner:
+Run the complete suite or specific experiments via the CLI runner or specialized benchmark scripts:
 
-### 1. Run All Experiments (Full / Fast Mode)
+### 1. Run Modular Experiments (Full / Fast Mode)
 
 ```bash
 # Fast mode (100 Monte Carlo runs - ~5 seconds)
@@ -141,7 +144,7 @@ python run_experiments.py --all --fast
 python run_experiments.py --all
 ```
 
-### 2. Run Specific Experiments
+### 2. Run Specific Modular Experiments
 
 ```bash
 # EXP 1: Structural Blindness Verification (Proposition 1)
@@ -157,20 +160,33 @@ python run_experiments.py --exp 4
 python run_experiments.py --exp 5
 ```
 
+### 3. Monolithic Reproduction & Extended Benchmarks
+
+```bash
+# Run complete monolithic reproduction suite (EXP 1 to EXP 10 + 2D verification)
+python reproduce_all_experiments.py
+
+# Regenerate high-resolution exact paper publication figures (300 DPI)
+python scripts/reproduce_exact_figures.py
+
+# Run 6D multivariate drone telemetry and nonlinear EKF tracking benchmark
+python scripts/multivariate_6d_drone_benchmark.py
+```
+
 All generated figures are saved at 300 DPI in the `figures/` directory.
 
 ---
 
 ##  Summary of Experimental Benchmarks
 
-| Scenario | Evaluated Metric | Standard KF | Huber-Robust KF | Particle Filter | **RKAKF (Proposed)** |
+| Scenario | Evaluated Metric | Standard KF | Huber-Robust KF | Alternative / Baseline | **RKAKF (Proposed)** |
 |:---|:---|:---:|:---:|:---:|:---:|
 | **Proposition 1** | Empirical Variance ($M \to \infty$) | Diverges (if unconstrained) | Diverges | -- | **Strictly Bounded** ($\le 0.495$) |
 | **Proposition 2** | Post-Shock Recovery | Diverges ($p=1$) | Frozen ($p=2$) | -- | **Exponential Decay** ($p=3, \mathcal{O}(\lambda^t)$) |
-| **Stealth Burst** | In-Burst RMSE | 1.2144 | 0.8120 | 0.5738 (ESS=1) | **0.5811** (52.1% reduction) |
-| **Continuous CLG**| Steady-State RMSE | 1.6320 | **0.6102** | Degenerates | **0.7064** (57.0% reduction) |
-| **Peak Outlier**  | Maximum Absolute Error | 12.0048 | 1.7654 | Degenerates | **3.0247** (74.8% reduction) |
-| **Drone Telemetry**| Flight Altitude RMSE | 0.4020 | 0.3218 (ripples) | -- | **0.2558** (Smooth tracking) |
+| **Stealth Burst** | In-Burst RMSE | 1.2144 | 0.8120 | 0.5738 (Particle Filter, ESS=1) | **0.5811** (52.1% reduction) |
+| **Continuous CLG**| Steady-State RMSE | 1.6320 | **0.6102** | Degenerates (Particle Filter) | **0.7064** (56.7% reduction) |
+| **Peak Outlier**  | Maximum Absolute Error | 12.0048 | 1.7654 | Degenerates (Particle Filter) | **3.0247** (74.8% reduction) |
+| **Drone Telemetry**| Flight Altitude RMSE | 0.3218 | 0.3231 (ripples) | 0.4020 ($H_\infty$) | **0.2558** (Smooth tracking) |
 | **Complexity**    | Per-Step Scaling | $\mathcal{O}(d^3)$ | $\mathcal{O}(d^3)$ | $\mathcal{O}(N d^2)$ | **$\mathcal{O}(d^3)$** |
 
 > **Operational Boundary Note:** As transparently documented in the paper, memoryless M-estimators (Huber KF) remain optimal for continuous, stationary i.i.d. noise due to the absence of memory accumulation. The proposed RKAKF is uniquely engineered for localized, stealthy cyber-physical bursts where variance-based detectors fail.
