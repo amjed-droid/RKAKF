@@ -81,4 +81,11 @@ top1_*.png
 test_*.png
 new_side_*.png
 
+# Manuscript drafts and local scratch
+*.doc
+*.docx
+*البحث*.md
+scratch/
+
+
 

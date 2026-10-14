@@ -29,7 +29,21 @@ import matplotlib.pyplot as plt
 
 # Output directory for Python-generated figures
 OUT_DIR = os.path.join(os.path.dirname(__file__), "python_results")
+FIGURES_DIR = os.path.join(os.path.dirname(__file__), "figures")
 os.makedirs(OUT_DIR, exist_ok=True)
+os.makedirs(FIGURES_DIR, exist_ok=True)
+
+# Automatically mirror saved figures to figures/ directory for publication LaTeX compilation
+_orig_plt_savefig = plt.savefig
+def _mirrored_plt_savefig(fname, *args, **kwargs):
+    _orig_plt_savefig(fname, *args, **kwargs)
+    base = os.path.basename(fname)
+    if base.startswith("PY_"):
+        clean_base = base[3:]
+        fig_target = os.path.join(FIGURES_DIR, clean_base)
+        _orig_plt_savefig(fig_target, *args, **kwargs)
+
+plt.savefig = _mirrored_plt_savefig
 
 # Set global seed for reproducibility
 np.random.seed(42)
@@ -55,23 +69,26 @@ def cauchy_rnd_trunc(x0, gamma, M, size=1):
                 break
     return samples
 
-def generate_CLG(M, C, gamma_c, sigma, b_lap, p1, p2, n=1):
+def generate_CLG(M, C=0.5, gamma_c=1.0, sigma=0.5, b_lap=0.3, p1=0.5, p2=0.3, p3=None, n=1):
     """
     Compound Cauchy-Laplace-Gaussian (CLG) mixture generator:
     p1: Gaussian weight
     p2: Laplace weight
-    p3: min(C / M, 1 - p1 - p2) truncated Cauchy weight
+    p3: Truncated Cauchy weight (if None, dynamic min(C / M, 1 - p1 - p2))
     """
-    p3 = min(C / max(float(M), 1.0), 1.0 - p2)
-    p3 = max(p3, 0.0)
-    p_gauss = max(0.0, 1.0 - p2 - p3)
+    if p3 is None:
+        p3_eff = min(float(C) / max(float(M), 1.0), max(0.0, 1.0 - p1 - p2))
+    else:
+        p3_eff = float(p3)
+    p3_eff = max(0.0, min(1.0, p3_eff))
+    p_gauss = max(0.0, 1.0 - p2 - p3_eff)
     
     u = np.random.uniform(0.0, 1.0, n)
     z = np.empty(n)
     
-    mask_c = u < p3
-    mask_l = (u >= p3) & (u < p3 + p2)
-    mask_g = u >= (p3 + p2)
+    mask_c = u < p3_eff
+    mask_l = (u >= p3_eff) & (u < p3_eff + p2)
+    mask_g = u >= (p3_eff + p2)
     
     n_c = np.sum(mask_c)
     if n_c > 0:
@@ -428,7 +445,7 @@ def run_exp1():
     axes[1, 1].set_title(f'Hybrid CLG Noise (M={M_demo}, Kurt={k_demo:.0f})')
     axes[1, 1].grid(True)
     
-    plt.suptitle('EXP 1: Structural Blindness — CLG Attack Model (Python)', fontsize=14, fontweight='bold')
+    plt.suptitle('EXP 1: Structural Blindness — Dynamically Constrained CLG Mixture', fontsize=13, fontweight='bold')
     plt.tight_layout()
     plt.savefig(os.path.join(OUT_DIR, "PY_EXP1_Structural_Blindness.png"), dpi=300)
     plt.close()
@@ -452,24 +469,24 @@ def run_exp2():
     y2 = H * x_true2 + np.sqrt(R_nom) * np.random.randn(N2)
     atk2_start, atk2_end = 400, 500
     for k in range(atk2_start, atk2_end + 1):
-        y2[k] += generate_CLG(500, C, gamma_c, sigma, b_lap, p1, p2, 1)
+        y2[k] += generate_CLG(M=500.0, gamma_c=gamma_c, sigma=sigma, b_lap=b_lap, p1=p1, p2=p2, p3=0.20, size=1)
         
     xKF2 = run_KF_1D(F, H, Q, R_nom, y2, N2)
     xRK2, kappa2, Rmod2, K2 = run_RKAKF_1D(F, H, Q, R_nom, y2, N2, kappa_th=4.0)
     
-    rmse_kf2 = compute_rmse(x_true2, xKF2)
-    rmse_rk2 = compute_rmse(x_true2, xRK2)
+    rmse_kf2 = compute_rmse(x_true2[atk2_start:atk2_end+1], xKF2[atk2_start:atk2_end+1])
+    rmse_rk2 = compute_rmse(x_true2[atk2_start:atk2_end+1], xRK2[atk2_start:atk2_end+1])
     impr2 = (rmse_kf2 - rmse_rk2) / rmse_kf2 * 100.0
     
-    print(f"  Standard KF RMSE : {rmse_kf2:.4f}")
-    print(f"  RKAKF RMSE       : {rmse_rk2:.4f}")
-    print(f"  Improvement      : {impr2:.2f}%")
+    print(f"  Burst Standard KF RMSE : {rmse_kf2:.4f}")
+    print(f"  Burst RKAKF RMSE       : {rmse_rk2:.4f}")
+    print(f"  Burst Improvement      : {impr2:.2f}%")
     
     fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
     
     axes[0].plot(range(N2), x_true2, 'k-', lw=1.5, label='Ground Truth')
-    axes[0].plot(range(N2), xKF2, 'r--', lw=1.2, label=f'Standard KF (RMSE={rmse_kf2:.3f})')
-    axes[0].plot(range(N2), xRK2, 'g-', lw=1.5, label=f'RKAKF (RMSE={rmse_rk2:.3f})')
+    axes[0].plot(range(N2), xKF2, 'r--', lw=1.2, label=f'Standard KF (RMSE={rmse_kf2:.4f})')
+    axes[0].plot(range(N2), xRK2, 'g-', lw=1.5, label=f'RKAKF (RMSE={rmse_rk2:.4f})')
     axes[0].axvspan(atk2_start, atk2_end, color='red', alpha=0.15, label='Attack Window')
     axes[0].set_ylabel('State')
     axes[0].set_title(f'EXP 2: KF RMSE={rmse_kf2:.4f} | RKAKF RMSE={rmse_rk2:.4f} ({impr2:.1f}% reduction)')
@@ -596,8 +613,8 @@ def run_exp4():
     fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
     
     axes[0].plot(range(N4), x_true4, 'k-', lw=1.5, label='Ground Truth')
-    axes[0].plot(range(N4), xHUB4, 'r--', lw=1.2, label=f'Huber KF (RMSE={rmse_hub4:.3f})')
-    axes[0].plot(range(N4), xRK4, 'b-', lw=1.2, label=f'RKAKF (RMSE={rmse_rk4:.3f})')
+    axes[0].plot(range(N4), xHUB4, 'r--', lw=1.2, label=f'Huber KF (RMSE={rmse_hub4:.4f})')
+    axes[0].plot(range(N4), xRK4, 'b-', lw=1.2, label=f'RKAKF (RMSE={rmse_rk4:.4f})')
     axes[0].set_ylabel('State')
     axes[0].set_title(f'EXP 4: Huber RMSE={rmse_hub4:.4f} vs RKAKF RMSE={rmse_rk4:.4f}')
     axes[0].legend()
@@ -654,7 +671,7 @@ def run_exp5():
             
         ym = H * xt + np.sqrt(R_nom) * np.random.randn(N_step5)
         for k in range(N_step5):
-            ym[k] += generate_CLG(M5, C, gamma_c, sigma, b_lap, p1, p2, 1)
+            ym[k] += generate_CLG(M5, C, gamma_c, sigma, b_lap, p1, p2, p3=0.20, n=1)
             
         xk = run_KF_1D(F, H, Q, R_nom, ym, N_step5)
         xh = run_Huber_1D(F, H, Q, R_nom, ym, N_step5)
@@ -777,10 +794,10 @@ def run_exp6():
     fig, axes = plt.subplots(2, 1, figsize=(10, 7))
     
     axes[0].plot(t6, x_true6, 'k-', lw=1.5, label='Ground Truth')
-    axes[0].plot(t6, xKF6, 'r--', lw=1.0, label=f'Standard KF (RMSE={rmse_kf6:.3f})')
-    axes[0].plot(t6, xHI6, 'c-.', lw=1.0, label=f'H-Infinity (RMSE={rmse_hi6:.3f})')
-    axes[0].plot(t6, xHUB6, 'b-.', lw=1.2, label=f'Huber KF (RMSE={rmse_hub6:.3f})')
-    axes[0].plot(t6, xRK6, 'g-', lw=1.5, label=f'RKAKF (RMSE={rmse_rk6:.3f})')
+    axes[0].plot(t6, xKF6, 'r--', lw=1.0, label=f'Standard KF (RMSE={rmse_kf6:.4f})')
+    axes[0].plot(t6, xHI6, 'c-.', lw=1.0, label=f'H-Infinity (RMSE={rmse_hi6:.4f})')
+    axes[0].plot(t6, xHUB6, 'b-.', lw=1.2, label=f'Huber KF (RMSE={rmse_hub6:.4f})')
+    axes[0].plot(t6, xRK6, 'g-', lw=1.5, label=f'RKAKF (RMSE={rmse_rk6:.4f})')
     for bk in burst6:
         axes[0].axvline(bk * dt, color='red', ls=':', alpha=0.5)
     axes[0].set_ylabel('Altitude State')
@@ -1088,13 +1105,13 @@ def run_exp10(exp2_res, exp4_res, exp6_res, exp5_res):
     # Subplot 1: EXP 2 (Localized Burst)
     axes[0, 0].bar(['Standard KF', 'RKAKF'], [exp2_res[0], exp2_res[1]], color=['salmon', 'lightgreen'])
     axes[0, 0].set_ylabel('RMSE')
-    axes[0, 0].set_title('EXP 2: Localized Burst')
+    axes[0, 0].set_title('(a) Localized Stealth Burst (EXP 2)', fontsize=11, fontweight='semibold')
     axes[0, 0].grid(True)
     
-    # Subplot 2: EXP 4 (Continuous CLG - Huber wins)
+    # Subplot 2: EXP 4 (Continuous CLG)
     axes[0, 1].bar(['Huber KF', 'RKAKF'], [exp4_res[0], exp4_res[1]], color=['orange', 'royalblue'])
     axes[0, 1].set_ylabel('RMSE')
-    axes[0, 1].set_title('EXP 4: Continuous CLG (Huber wins)')
+    axes[0, 1].set_title('(b) Continuous CLG Noise (EXP 4)', fontsize=11, fontweight='semibold')
     axes[0, 1].grid(True)
     
     # Subplot 3: EXP 6 (Drone Trajectory)
@@ -1102,7 +1119,7 @@ def run_exp10(exp2_res, exp4_res, exp6_res, exp5_res):
     d_vals = [exp6_res['rmse_kf'], exp6_res['rmse_hi'], exp6_res['rmse_hub'], exp6_res['rmse_rk']]
     axes[1, 0].bar(d_labels, d_vals, color=['salmon', 'skyblue', 'orange', 'lightgreen'])
     axes[1, 0].set_ylabel('RMSE')
-    axes[1, 0].set_title('EXP 6: Synthetic FPV Drone')
+    axes[1, 0].set_title('(c) Agile Quadrotor Telemetry (EXP 6)', fontsize=11, fontweight='semibold')
     axes[1, 0].grid(True)
     
     # Subplot 4: EXP 5 (Monte Carlo 1000 runs)
@@ -1110,10 +1127,10 @@ def run_exp10(exp2_res, exp4_res, exp6_res, exp5_res):
     mc_vals = [exp5_res['rmse_kf'], exp5_res['rmse_hub'], exp5_res['rmse_rk']]
     axes[1, 1].bar(mc_labels, mc_vals, color=['salmon', 'orange', 'royalblue'])
     axes[1, 1].set_ylabel('Mean RMSE')
-    axes[1, 1].set_title('EXP 5: Monte Carlo (1000 runs)')
+    axes[1, 1].set_title('(d) Monte Carlo Ensemble (EXP 5, 1000 Runs)', fontsize=11, fontweight='semibold')
     axes[1, 1].grid(True)
     
-    plt.suptitle('EXP 10: Benchmark Summary Dashboard (Python Verification)', fontsize=14, fontweight='bold')
+    plt.suptitle('Consolidated Multi-Regime Tracking Benchmark', fontsize=13, fontweight='bold')
     plt.tight_layout()
     plt.savefig(os.path.join(OUT_DIR, "PY_EXP10_Summary_Dashboard.png"), dpi=300)
     plt.close()
